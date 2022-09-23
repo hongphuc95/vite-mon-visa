@@ -1,3 +1,0 @@
-https:r7---sn-4gxx-hgnz.gvt1.com:443:.::3	0	19257	https:r7---sn-4gxx-hgnz.gvt1.com:443:r7---sn-4gxx-hgnz.gvt1.com:443::n:1666441735:h3:y:1663849525:n::|n:y:
-https:safebrowsing.googleapis.com:443:.:^firstPartyDomain=safebrowsing.86868755-6b82-4842-b301-72671a0db32e.mozilla:3	0	19257	https:safebrowsing.googleapis.com:443:safebrowsing.googleapis.com:443::n:1666441543:h3:y:1663849525:n:^firstPartyDomain=safebrowsing.86868755-6b82-4842-b301-72671a0db32e.mozilla:|n:y:
-https:redirector.gvt1.com:443:.::3	0	19257	https:redirector.gvt1.com:443:redirector.gvt1.com:443::n:1666441735:h3:y:1663849525:n::|n:y:

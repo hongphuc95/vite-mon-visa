@@ -1,4 +1,5 @@
 import time
+import platform
 import os
 import sys
 import logging
@@ -43,9 +44,16 @@ class Appointment():
             firefox_options = Options()
             firefox_options.add_argument('--headless')
             firefox_options.add_argument('--window-size=1920,1080')
-            firefox_profile = webdriver.FirefoxProfile('./profiles/xlwujpyo.hongphuc')
+            firefox_profile = webdriver.FirefoxProfile('./profiles/test')
 
-            self.driver = webdriver.Firefox(executable_path='./libs/geckodriver', firefox_profile=firefox_profile, options=firefox_options, service_log_path=log_path + 'geckodriver.log')
+            gecko_driver = {
+                'Linux': 'geckodriver_linux',
+                'Darwin': 'geckodriver_mac',
+                'Windows': 'geckodriver_windows',
+            }
+            os_name = platform.system()
+            gecko_binary = gecko_driver.get(os_name)
+            self.driver = webdriver.Firefox(executable_path='./libs/'+gecko_binary, options=firefox_options, firefox_profile=firefox_profile, service_log_path=log_path + 'geckodriver.log')
             self.driver.implicitly_wait(10)
 
     def destroy_driver(self):

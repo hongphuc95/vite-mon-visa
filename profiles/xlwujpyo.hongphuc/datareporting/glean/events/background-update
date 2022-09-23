@@ -1,1 +1,0 @@
-{"timestamp":56057866,"category":"nimbus_events","name":"enrollment","extra":{"experiment":"tcp-rollout-phase-iii-tcp-on-by-default-for-50-existing-release-profiles","branch":"control","enrollment_id":"e6b04cdf-5e48-456b-8056-4674d8645033","experiment_type":"nimbus"}}
