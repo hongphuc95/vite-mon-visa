@@ -7,6 +7,7 @@ import logging
 from datetime import datetime
 from dotenv import load_dotenv
 from prefectures import prefectures
+from utils import send_email
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -67,7 +68,7 @@ class Appointment():
 
         return True
 
-    def slot_available(self, url, desk_id=None, delay_second=5):
+    def slot_available(self, url, desk_id=None, delay_second=3):
         self.driver.get(url)
         self.driver.delete_all_cookies()
         time.sleep(delay_second)
@@ -106,7 +107,7 @@ class Appointment():
         
         return False
 
-    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids):
+    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=3):
         try:
             file = open(log_path + operation_name + '_checkpoint.txt', 'r+')
         except OSError:
@@ -122,24 +123,31 @@ class Appointment():
                     if found:
                         desk_id_found = desk_id
                         break
-                    time.sleep(5)
+                    time.sleep(delay_second)
             else:
                 found = False
 
             if found:
                 logging.info('{}: SLOT AVAILABLE FOR PLANNING ID {}'.format(prefecture_name, desk_id_found))
                 current_time = datetime.now().strftime("%H:%M:%S")
-                message = "{} - {} - {}: SLOT AVAILABLE AT {} OPTION {}".format(current_time, prefecture_name, visa_name, url, desk_ids.index(desk_id_found)+1)
                 last_result = file.read()
                 if 'available' in last_result:
                     logging.info('{}: SLOT ALREADY AVAILABLE: SKIPPING EMAIL'.format(prefecture_name))
                 else:
                     logging.info('{}: NEW AVAILABLE SLOT: SENDING EMAIL!'.format(prefecture_name))
 
-                    if os.getenv('EMAIL_NOTIFY_ENABLED'):
-                        # TODO Send email
-                        pass
-                    if os.getenv('SMS_NOTIFY_ENABLED'):
+                    if os.getenv('EMAIL_NOTIFY_ENABLED') == 'true' or os.getenv('EMAIL_NOTIFY_ENABLED') == True:
+                        subjects = '[Visa Alert] New slot found for {}'.format(prefecture_name)
+                        content = f'''
+                            <h1>Slot available at prefecture {prefecture_name}</h1>
+                            <p>Found at: <strong>{current_time}</strong></p>
+                            <p>Type: <strong>{visa_name}</strong></p>
+                            <p>Option order: <strong>{desk_ids.index(desk_id_found)+1}</strong></p>
+                            <p>Link: <a href={url}>Click here to access prefecture site</a></p>
+                        '''
+                        send_email(subjects=subjects, content=content)
+                        
+                    if os.getenv('SMS_NOTIFY_ENABLED') == 'true' or os.getenv('EMAIL_NOTIFY_ENABLED') == True:
                         # TODO Send sms
                         pass
                 file.seek(0)
@@ -148,7 +156,7 @@ class Appointment():
             else:
                 logging.info('{}: NO SLOT AVAILABLE'.format(prefecture_name))
                 file.seek(0)
-                file.write('unavailable')
+                file.write('not found')
                 file.truncate() 
 
         except AssertionError as err:

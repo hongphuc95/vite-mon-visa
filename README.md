@@ -13,7 +13,14 @@ This tool uses `Selenium` to be able to scrape and function. You will need a web
 
 **(*)Chrome will be supported in the future**
 
-# Installation
+# Deployment
+## Docker
+```
+docker run -d --name <app_name> --env-file <env_file_path> hongphuc95/vite-mon-visa
+```
+To configure the environment file please refer the `Configuration` section in this doc 
+
+## Build the project from the code source
 ```
 python3 -m venv venv
 source ./venv/bin/activate
@@ -27,8 +34,9 @@ The following configurations are optionals. You can either use `.env` file or se
 To enable notifications via email, set these environment variables below
 ```
 EMAIL_NOTIFY_ENABLED=true
-SENDGRID_BEARER_TOKEN=<token>
+SENDGRID_API_KEY=<api_key>
 SENDGRID_EMAIL=<your_destination_email>
+(optional) SENDGRID_SENDER=<sender_address>
 ```
 
 To enable notifications via sms, set these environment variables below
