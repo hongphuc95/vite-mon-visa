@@ -6,7 +6,7 @@ if __name__ == '__main__':
     if os.environ.get('REFRESH_TIME'):
         refresh_time = int(os.environ.get('REFRESH_TIME'))
     else:
-        refresh_time = 300
+        refresh_time = 180
 
     starttime = time.time()
     while True:

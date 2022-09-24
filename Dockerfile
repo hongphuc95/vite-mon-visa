@@ -3,8 +3,8 @@ FROM ubuntu:20.04
 ENV EMAIL_NOTIFY_ENABLED false
 ENV SMS_NOTIFY_ENABLED false
 ENV LOG_PATH ./logs/
-ENV REFRESH_TIME 300
-ENV DEBIAN_FRONTEND=noninteractive
+ENV REFRESH_TIME 180
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y python3.9 python3.9-dev python3.9-venv python3-pip python3-wheel build-essential firefox wget \

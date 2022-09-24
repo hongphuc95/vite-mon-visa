@@ -2,7 +2,7 @@
 
 This tool will notify users if an appointment is available in a prefecture
 
-![CI Pipeline](https://github.com/hongphuc95/vite-mon-visa/actions/workflows/ci_pipeline.yml/badge.svg)
+![CI Pipeline](https://github.com/hongphuc95/vite-mon-visa/actions/workflows/ci_pipeline.yml/badge.svg?branch=main)
 
 # Supported prefectures
 This tool currently supports the following prefecture
@@ -53,6 +53,7 @@ TWILIO_TO_NUMBER=<your_phone_number>
 To configure the log's path, set the desired path like following
 ```
 LOG_PATH=<log_path>
+REFRESH_TIME=<request_refresh> # Default to 3 minutes
 ENGINE=<browser_engine> # Will be supported in the future, default to Firefox
 ```
 
