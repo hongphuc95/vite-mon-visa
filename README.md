@@ -60,7 +60,7 @@ ENGINE=<browser_engine> # Will be supported in the future, default to Firefox
 ## Email notification
 If the tool is able to detect a slot available, you will receive an email like the image below containing the time, the type of request and the order of the planning in the list
 
-![Email notification](./assets/img/email_notification.png)
+![Email notification](./assets/img/email_notification.PNG)
 
 
 ## Prefectures list (Advanced)
