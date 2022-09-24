@@ -4,6 +4,7 @@ ENV EMAIL_NOTIFY_ENABLED false
 ENV SMS_NOTIFY_ENABLED false
 ENV LOG_PATH ./logs/
 ENV REFRESH_TIME 180
+ENV TZ Europe/Paris
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \

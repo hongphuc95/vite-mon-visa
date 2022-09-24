@@ -1,6 +1,8 @@
+from email import message
 import os
 import base64
 import logging
+import requests
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import (
     Mail, Attachment, FileContent, FileName,
@@ -39,8 +41,18 @@ def send_email(subjects, content, attachment_file=None):
         logging.info('Email sent with status code {}'.format(response.status_code))
     except Exception as e:
         logging.error('An error occured while sending email: {}'.format(e))
-        print(e)
 
 
-def send_sms():
-    pass
+def send_sms(message):
+    url = 'https://api.sendwithses.com/send-sms'
+    to_number = os.environ.get('SMS_TO_NUMBER')
+    template_key = os.environ.get('SMS_API_KEY')
+
+    headers = {'template-key': template_key}
+    payload = {'mobile': to_number, 'message': message}
+    
+    try:
+        r = requests.post(url=url, data=payload, headers=headers)
+        logging.info('Email sent with status code {}'.format(r.status_code))
+    except Exception as e:
+        logging.error('An error occured while sending sms: {}'.format(e))

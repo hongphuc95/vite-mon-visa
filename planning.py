@@ -6,13 +6,11 @@ import sys
 import logging
 
 from datetime import datetime
-from dotenv import load_dotenv
-from utils import send_email
+from utils import send_email, send_sms
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-load_dotenv()
 log_path = os.getenv('LOG_PATH')
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', filename=log_path + 'planning.log', level=logging.INFO)
@@ -37,7 +35,6 @@ class Appointment():
             chrome_options.add_experimental_option("prefs", chrome_prefs)
 
             self.driver = webdriver.Chrome(executable_path='./libs/chromedriver', options=chrome_options)
-            self.driver.implicitly_wait(10)
 
         elif self.web_driver == 'firefox':
             from selenium.webdriver.firefox.options import Options
@@ -55,7 +52,6 @@ class Appointment():
             os_name = platform.system()
             gecko_binary = gecko_driver.get(os_name)
             self.driver = webdriver.Firefox(executable_path='./libs/'+gecko_binary, options=firefox_options, firefox_profile=firefox_profile, service_log_path=log_path + 'geckodriver.log')
-            self.driver.implicitly_wait(10)
 
     def destroy_driver(self):
         self.driver.quit()
@@ -154,8 +150,15 @@ class Appointment():
                         send_email(subjects=subjects, content=content, attachment_file=attachment_file)
                         
                     if os.getenv('SMS_NOTIFY_ENABLED') == 'true' or os.getenv('EMAIL_NOTIFY_ENABLED') == True:
-                        # TODO Send sms
-                        pass
+                        message = f'''
+                            Slot available at prefecture {prefecture_name}
+                            Found at: {current_time}
+                            Type: {visa_name}
+                            Option order: {desk_ids.index(desk_id_found)+1}
+                            Link: {url}
+                        '''
+                        send_sms(message=message)
+                        
                 file.seek(0)
                 file.write('available')
                 file.truncate()
