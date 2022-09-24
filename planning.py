@@ -1,3 +1,4 @@
+import json
 import time
 import platform
 import os
@@ -6,7 +7,6 @@ import logging
 
 from datetime import datetime
 from dotenv import load_dotenv
-from prefectures import prefectures
 from utils import send_email
 
 from selenium import webdriver
@@ -68,7 +68,7 @@ class Appointment():
 
         return True
 
-    def slot_available(self, url, desk_id=None, delay_second=3):
+    def slot_available(self, url, desk_id=None, delay_second=4):
         self.driver.get(url)
         self.driver.delete_all_cookies()
         time.sleep(delay_second)
@@ -100,14 +100,14 @@ class Appointment():
         # Result Page
         try:
             next_button = self.driver.find_element('name', 'nextButton')
-            
+            self.driver.save_screenshot(log_path +'result.png')
             return True
         except:
             pass
         
         return False
 
-    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=3):
+    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=5):
         try:
             file = open(log_path + operation_name + '_checkpoint.txt', 'r+')
         except OSError:
@@ -145,7 +145,13 @@ class Appointment():
                             <p>Option order: <strong>{desk_ids.index(desk_id_found)+1}</strong></p>
                             <p>Link: <a href={url}>Click here to access prefecture site</a></p>
                         '''
-                        send_email(subjects=subjects, content=content)
+                        attachment_file = {
+                            'path': log_path+'result.png',
+                            'type': 'img/png',
+                            'name': 'result.png',
+                            'content_id': 'Result image' 
+                        }
+                        send_email(subjects=subjects, content=content, attachment_file=attachment_file)
                         
                     if os.getenv('SMS_NOTIFY_ENABLED') == 'true' or os.getenv('EMAIL_NOTIFY_ENABLED') == True:
                         # TODO Send sms
@@ -168,6 +174,11 @@ class Appointment():
 def run(web_driver='firefox'):
     appointment = Appointment(web_driver=web_driver)
     appointment.set_up_driver()
+
+    prefectures_path = './prefectures.json'
+
+    with open(prefectures_path, 'r') as j:
+        prefectures = json.loads(j.read())
 
     for prefecture in prefectures:
         appointment.scrape_for_slot(prefecture['url'], prefecture['operation_name'], prefecture['prefecture_name'], prefecture['appointment_name'], prefecture['desk_ids'])

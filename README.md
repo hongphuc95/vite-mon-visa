@@ -2,8 +2,10 @@
 
 This tool will notify users if an appointment is available in a prefecture
 
+![CI Pipeline](https://github.com/hongphuc95/vite-mon-visa/actions/workflows/ci_pipeline.yml/badge.svg)
+
 # Supported prefectures
-This tool is currently support for the following prefecture
+This tool currently supports the following prefecture
 - Val d'Oise
 
 To add support for more prefectures, please refer to the prefecture configuration
@@ -18,7 +20,7 @@ This tool uses `Selenium` to be able to scrape and function. You will need a web
 ```
 docker run -d --name <app_name> --env-file <env_file_path> hongphuc95/vite-mon-visa
 ```
-To configure the environment file please refer the `Configuration` section in this doc 
+To configure the environment file please refer to the `Configuration` section in this doc 
 
 ## Build the project from the code source
 ```
@@ -29,17 +31,18 @@ pip install -r requirements.txt
 
 # Configuration
 ## Environment variables
-The following configurations are optionals. You can either use `.env` file or set environment variables manually
+The following configurations are optional. You can either use `.env` file or set environment variables manually
 
 To enable notifications via email, set these environment variables below
 ```
 EMAIL_NOTIFY_ENABLED=true
-SENDGRID_API_KEY=<api_key>
 SENDGRID_EMAIL=<your_destination_email>
 (optional) SENDGRID_SENDER=<sender_address>
+(optional) SENDGRID_API_KEY=<api_key>
 ```
+In case you want to set up the sender email using your own domain, you can do so by providing the sender email address and the Sendgrid API key value
 
-To enable notifications via sms, set these environment variables below
+To enable notifications via SMS, set these environment variables below
 ```
 SMS_NOTIFY_ENABLED=true
 TWILIO_AUTH_TOKEN=<token>
@@ -47,20 +50,36 @@ TWILIO_FROM_NUMBER=<twilio_trial_number>
 TWILIO_TO_NUMBER=<your_phone_number>
 ```
 
-To configure the logs path, set a desired path like following
+To configure the log's path, set the desired path like following
 ```
 LOG_PATH=<log_path>
 ENGINE=<browser_engine> # Will be supported in the future, default to Firefox
 ```
 
-## Prefectures list <Advanced>
-To tell the tool what prefecture needed to be monitored, modify the list of prefectures in the `prefectures.py` file using the template below
+# Notification
+## Email notification
+If the tool is able to detect a slot available, you will receive an email like the image below containing the time, the type of request and the order of the planning in the list
+
+![Email notification](./assets/img/email_notification.png)
+
+
+## Prefectures list (Advanced)
+To tell the tool what prefecture needed to be monitored, modify the list of prefectures in the `prefectures.json` file using the template below
 ```
 {
-    'url': <reservation_url>,
-    'desk_ids': <planning_or_desk_id> # Look up manually by inspecting the code source,
-    'operation_name': <operation_name>,
-    'prefecture_name': <prefecture_name>,
-    'appointment_name': <appointment_name>,
+ 'url': <reservation_url>,
+ 'desk_ids': <planning_or_desk_id> # Look up manually by inspecting the code source,
+ 'operation_name': <operation_name>,
+ 'prefecture_name': <prefecture_name>,
+ 'appointment_name': <appointment_name>,
 }
 ```
+To identify all the `desk_ids` available, open the prefecture site in your browser and head to the planning selection, it would look like this
+
+![Planning options](./assets/img/planning_selection.png)
+
+Then we can inspect the code source to retrieve the `desk_id` associated with each planning
+
+![Planning id inspection](./assets/img/planning_id_inspection.png)
+
+**(*) We recommend spinning up this tool with 1 to 3 prefectures. The more prefectures you add up in the list, the more chance your IP address is likely to get blacklisted**
