@@ -56,3 +56,18 @@ def send_sms(message):
         logging.info('Email sent with status code {}'.format(r.status_code))
     except Exception as e:
         logging.error('An error occured while sending sms: {}'.format(e))
+
+if __name__ == '__main__':
+    from datetime import datetime
+    prefecture_name = 'Val d\'Oise'
+    current_time = datetime.now().strftime("%H:%M:%S")
+    visa_name = 'naturalisation'
+    url = 'https://www.val-doise.gouv.fr/booking/create/11343/0'
+    message = f'''
+        Slot available at prefecture {prefecture_name}
+        Found at: {current_time}
+        Type: {visa_name}
+        Option order: '1'
+        Link: {url}
+    '''
+    send_sms(message=message)

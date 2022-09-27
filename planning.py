@@ -61,10 +61,11 @@ class Appointment():
         assert '502 Bad Gateway' not in self.driver.page_source, '502 Bad Gateway'
         assert '503 Service Unavailable' not in self.driver.page_source, '503 Service Unavailable'
         assert '504 Gateway Timeout' not in self.driver.page_source, '504 Gateway Timeout'
+        assert 'Service surchargé' not in self.driver.page_source, 'Service surchargé'
 
         return True
 
-    def slot_available(self, url, desk_id=None, delay_second=4):
+    def slot_available(self, url, desk_id=None, delay_second=3):
         self.driver.get(url)
         self.driver.delete_all_cookies()
         time.sleep(delay_second)
@@ -103,7 +104,7 @@ class Appointment():
         
         return False
 
-    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=5):
+    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=3):
         try:
             file = open(log_path + operation_name + '_checkpoint.txt', 'r+')
         except OSError:
@@ -158,7 +159,7 @@ class Appointment():
                             Link: {url}
                         '''
                         send_sms(message=message)
-                        
+
                 file.seek(0)
                 file.write('available')
                 file.truncate()
