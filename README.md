@@ -54,7 +54,7 @@ SMS_TO_NUMBER=<your_phone_number>
 To configure the log's path, set the desired path like following
 ```
 LOG_PATH=<log_path>
-REFRESH_TIME=<request_refresh> # Default to 3 minutes
+REFRESH_TIME=<request_refresh> # Default to 5 minutes
 ENGINE=<browser_engine> # Will be supported in the future, default to Firefox
 ```
 

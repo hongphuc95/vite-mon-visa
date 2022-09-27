@@ -65,7 +65,7 @@ class Appointment():
 
         return True
 
-    def slot_available(self, url, desk_id=None, delay_second=3):
+    def slot_available(self, url, desk_id=None, delay_second=5):
         self.driver.get(url)
         self.driver.delete_all_cookies()
         time.sleep(delay_second)
@@ -104,7 +104,7 @@ class Appointment():
         
         return False
 
-    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=3):
+    def scrape_for_slot(self, url, operation_name, prefecture_name, visa_name, desk_ids, delay_second=5):
         try:
             file = open(log_path + operation_name + '_checkpoint.txt', 'r+')
         except OSError:
