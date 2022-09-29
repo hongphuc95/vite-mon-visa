@@ -1,0 +1,15 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+groups:
+  - docker
+
+system_info:
+  default_user:
+    groups: [docker]
+
+packages:
+  - docker.io
+  - unattended-upgrades
