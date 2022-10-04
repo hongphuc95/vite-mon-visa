@@ -69,11 +69,11 @@ If the tool is able to detect a slot available, you will receive an email like t
 To tell the tool what prefecture needed to be monitored, modify the list of prefectures in the `prefectures.json` file using the template below
 ```
 {
- 'url': <reservation_url>,
- 'desk_ids': <planning_or_desk_id> # Look up manually by inspecting the code source,
- 'operation_name': <operation_name>,
- 'prefecture_name': <prefecture_name>,
- 'appointment_name': <appointment_name>,
+ "url": <reservation_url>,
+ "desk_ids": <planning_or_desk_id> # Look up manually by inspecting the code source,
+ "operation_name": <operation_name>,
+ "prefecture_name": <prefecture_name>,
+ "appointment_name": <appointment_name>,
 }
 ```
 To identify all the `desk_ids` available, open the prefecture site in your browser and head to the planning selection, it would look like this
