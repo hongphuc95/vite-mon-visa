@@ -2,11 +2,7 @@ name: CI to Docker Hub
 
 on:
   push:
-    branches: 
-      - '**'
-  pull_request: 
-    branches:
-      - '**'
+  pull_request:
 
 jobs:
   build_image:
