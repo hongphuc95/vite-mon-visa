@@ -71,7 +71,6 @@ def solve_captcha(page_url, site_key):
     response = requests.post("http://2captcha.com/in.php", data=form)
 
     if response.text[0:2] != "OK": 
-        print("Error")
         logging.error("Service error. Error code:" + response.text) 
     captcha_id = response.text[3:]
 

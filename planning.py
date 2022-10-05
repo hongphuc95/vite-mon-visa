@@ -13,7 +13,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
 log_path = os.getenv("LOG_PATH")
-auto_reservation = True
+auto_reservation = os.getenv("AUTO_RESERVATION", 'False').lower() == "true"
 
 logging.basicConfig(format="%(asctime)s %(levelname)-8s %(message)s", filename=log_path + "planning.log", level=logging.INFO)
 
@@ -155,7 +155,7 @@ class Appointment():
 
             try:
                 self.driver.maximize_window()
-                self.driver.execute_script("window.scrollTo(0, 250)") 
+                self.driver.execute_script("window.scrollTo(0, 300)") 
                 form_raw = self.driver.find_element("id", "FormBookingCreate")
                 try:
                     file = open(log_path + "form_raw.txt", "r+")
@@ -165,27 +165,27 @@ class Appointment():
                 file.write(form_raw.get_attribute('innerHTML'))
                 file.truncate()
 
-                # first_name = self.driver.find_element("name", "firstname")
-                # last_name = self.driver.find_element("name", "lastname")
-                # email = self.driver.find_element("name", "email")
-                # email_check = self.driver.find_element("name", "emailcheck")
-                # n_foreigner = self.driver.find_element("name", "eZBookingAdditionalField_value_34834")
+                first_name = self.driver.find_element("name", "firstname")
+                last_name = self.driver.find_element("name", "lastname")
+                email = self.driver.find_element("name", "email")
+                email_check = self.driver.find_element("name", "emailcheck")
+                nationality = self.driver.find_element("name", "eZBookingAdditionalField_value_21067")
+                entry_date = self.driver.find_element("name", "eZBookingAdditionalField_value_21071")
+                zip_code = self.driver.find_element("name", "eZBookingAdditionalField_value_21073")
 
-                # first_name.send_keys(os.getenv("FIRST_NAME"))
-                # last_name.send_keys(os.getenv("LAST_NAME"))
-                # email.send_keys(os.getenv("EMAIL"))
-                # email_check.send_keys(os.getenv("EMAIL"))
-                # n_foreigner.send_keys(os.getenv("FOREIGNER_NUMBER"))
+                first_name.send_keys(os.getenv("FIRST_NAME"))
+                last_name.send_keys(os.getenv("LAST_NAME"))
+                email.send_keys(os.getenv("EMAIL"))
+                email_check.send_keys(os.getenv("EMAIL"))
+                nationality.send_keys(os.getenv("NATIONALITY"))
+                entry_date.send_keys(os.getenv("ENTRY_DATE"))
+                actions = ActionChains(self.driver)
+                actions.click(on_element = zip_code).send_keys(os.getenv("ZIP_CODE"))
+                actions.perform()
 
-                # n_foreigner.click()
-                # phone_number = self.driver.find_element("name", "eZBookingAdditionalField_value_34835")
-                # actions = ActionChains(self.driver)
-                # actions.click(on_element = phone_number).send_keys(os.getenv("PHONE_NUMBER"))
-                # actions.perform()
-                # self.driver.save_screenshot(log_path +"result_formular.png")
-
-                # next_button = self.driver.find_element("name", "nextButton")
-                # next_button.send_keys(Keys.SPACE)
+                self.driver.save_screenshot(log_path +"result_formular.png")
+                next_button = self.driver.find_element("name", "nextButton")
+                next_button.send_keys(Keys.SPACE)
                 self.driver.save_screenshot(log_path +"result_confirmation.png")
             except Exception as e:
                 logging.error("Something went wrong while filling the personal information form: ", e)
@@ -223,7 +223,7 @@ class Appointment():
                 else:
                     logging.info("{}: NEW AVAILABLE SLOT: SENDING EMAIL!".format(prefecture_name))
 
-                    if os.getenv("EMAIL_NOTIFY_ENABLED") == "true" or os.getenv("EMAIL_NOTIFY_ENABLED") == True:
+                    if os.getenv("EMAIL_NOTIFY_ENABLED", "False").lower() == "true" or os.getenv("EMAIL_NOTIFY_ENABLED") == True:
                         if not auto_reservation:
                             subjects = "[Visa Alert] New slot found for {}".format(prefecture_name)
                             content = f'''
@@ -252,12 +252,11 @@ class Appointment():
                                 <p>Link: <a href={url}>Click here to access prefecture site</a></p>
                             '''       
                             if desk_id_found:
-                                print("yes")
                                 content += f"<br><p>Option order: <strong>{desk_ids.index(desk_id_found)+1}</strong></p>"
 
                             send_email(subjects=subjects, content=content)
 
-                    if os.getenv("SMS_NOTIFY_ENABLED") == "true" or os.getenv("SMS_NOTIFY_ENABLED") == True:
+                    if os.getenv("SMS_NOTIFY_ENABLED", "False").lower() == "true" or os.getenv("SMS_NOTIFY_ENABLED") == True:
                         message = f'''
                             Slot available at prefecture {prefecture_name}
                             Found at: {current_time}
