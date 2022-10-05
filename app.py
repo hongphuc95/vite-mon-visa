@@ -3,8 +3,8 @@ import os
 from planning import run
 
 if __name__ == '__main__':
-    if os.environ.get('REFRESH_TIME'):
-        refresh_time = int(os.environ.get('REFRESH_TIME'))
+    if os.environ.get("REFRESH_TIME"):
+        refresh_time = int(os.environ.get("REFRESH_TIME"))
     else:
         refresh_time = 180
 
