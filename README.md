@@ -20,13 +20,15 @@ This tool uses `Selenium` to be able to scrape and function. You will need a web
 ```
 docker run -d --name <app_name> --env-file <env_file_path> hongphuc95/vite-mon-visa
 ```
-To configure the environment file please refer to the `Configuration` section in this doc 
+To configure the environment file please refer to the `Configuration` section in this documentation
 
-## Build the project from the code source
+## Run the project locally
+To launch this project on your local machine, execute these commands below:
 ```
 python3 -m venv venv
 source ./venv/bin/activate
 pip install -r requirements.txt
+python app.py
 ```
 
 # Configuration
@@ -54,7 +56,7 @@ SMS_TO_NUMBER=<your_phone_number>
 To configure the log's path, set the desired path like following
 ```
 LOG_PATH=<log_path>
-REFRESH_TIME=<request_refresh> # Default to 3 minutes
+REFRESH_TIME=<request_refresh> # Default to 5 minutes
 ENGINE=<browser_engine> # Will be supported in the future, default to Firefox
 ```
 
@@ -69,11 +71,12 @@ If the tool is able to detect a slot available, you will receive an email like t
 To tell the tool what prefecture needed to be monitored, modify the list of prefectures in the `prefectures.json` file using the template below
 ```
 {
- 'url': <reservation_url>,
- 'desk_ids': <planning_or_desk_id> # Look up manually by inspecting the code source,
- 'operation_name': <operation_name>,
- 'prefecture_name': <prefecture_name>,
- 'appointment_name': <appointment_name>,
+ "url": <reservation_url>,
+ "desk_ids": <planning_or_desk_id>, # Look up manually by inspecting the code source,
+ "warning": <warning_rules_page>, # Extra warning with rules page depends on perfectures
+ "operation_name": <operation_name>,
+ "prefecture_name": <prefecture_name>,
+ "appointment_name": <appointment_name>,
 }
 ```
 To identify all the `desk_ids` available, open the prefecture site in your browser and head to the planning selection, it would look like this
@@ -85,3 +88,22 @@ Then we can inspect the code source to retrieve the `desk_id` associated with ea
 ![Planning id inspection](./assets/img/planning_id_inspection.png)
 
 **(*) We recommend spinning up this tool with 1 to 3 prefectures. The more prefectures you add up in the list, the more chance your IP address is likely to get blacklisted**
+
+# Automated reservation (beta)
+The visa reservation can be done automatically for the Val d'Oise prefecture for the time being. You need to set the following parameters
+```
+AUTO_RESERVATION=true
+CAPTCHA_API_KEY=<2captcha_api_key> # Captcha solving service api key
+
+FIRST_NAME=<first_name>
+LAST_NAME=<last_name>
+EMAIL=<personal_email>
+PHONE_NUMBER=<phone_number>
+ENTRY_DATE=<entry_date_in_france>
+NATIONALITY=<nationality>
+ZIP_CODE=<resident_zip_code>
+```
+
+The tool will select the most recent available date to book. Then it'll try to bypass the captcha using the 2captcha service and fill the formular containing your personal information required by the prefecture
+
+You should receive an email from the prefecture confirming the reservation if this process worked
