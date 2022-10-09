@@ -164,6 +164,7 @@ class Appointment():
                 file.seek(0)
                 file.write(form_raw.get_attribute('innerHTML'))
                 file.truncate()
+                file.close()
 
                 first_name = self.driver.find_element("name", "firstname")
                 last_name = self.driver.find_element("name", "lastname")
@@ -186,6 +187,7 @@ class Appointment():
                 self.driver.save_screenshot(log_path +"result_formular.png")
                 next_button = self.driver.find_element("name", "nextButton")
                 next_button.send_keys(Keys.SPACE)
+                time.sleep(delay_second)
                 self.driver.save_screenshot(log_path +"result_confirmation.png")
             except Exception as e:
                 logging.error("Something went wrong while filling the personal information form: ", e)
@@ -236,9 +238,9 @@ class Appointment():
                                 content += f"<br><p>Option order: <strong>{desk_ids.index(desk_id_found)+1}</strong></p>"
 
                             attachment_file = {
-                                "path": log_path+"result.png",
+                                "path": log_path+"result_slot.png",
                                 "type": "img/png",
-                                "name": "result.png",
+                                "name": "result_slot.png",
                                 "content_id": "Result image" 
                             }
 
@@ -269,11 +271,13 @@ class Appointment():
                 file.seek(0)
                 file.write("available")
                 file.truncate()
+                file.close()
             else:
                 logging.info("{}: NO SLOT AVAILABLE".format(prefecture_name))
                 file.seek(0)
                 file.write("not found")
-                file.truncate() 
+                file.truncate()
+                file.close()
 
         except AssertionError as err:
             logging.error("{}: SITE DOWN ({})".format(prefecture_name, err))
