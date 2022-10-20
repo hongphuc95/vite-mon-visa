@@ -20,8 +20,8 @@ resource "aws_spot_instance_request" "visa-worker" {
   instance_type = var.instance_type
 
   vpc_security_group_ids = [aws_security_group.visa.id]
-  key_name                               = var.ssh_key
-  user_data                              = file("userdata.yaml")
+  key_name               = var.ssh_key
+  user_data              = file("userdata.yaml")
 
   tags = {
     terraform = "true"

@@ -146,6 +146,7 @@ class Appointment():
 
                 next_button = self.driver.find_element("name", "nextButton")
                 next_button.send_keys(Keys.SPACE)
+                time.sleep(delay_second)
                 self.driver.save_screenshot(log_path +"result_captcha.png")
             except Exception as e:
                 logging.error("Something went wrong while bypassing the captcha: ", e)
