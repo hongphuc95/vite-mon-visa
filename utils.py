@@ -11,7 +11,7 @@ from sendgrid.helpers.mail import (
 from dotenv import load_dotenv
 
 load_dotenv()
-log_path = os.getenv("LOG_PATH")
+log_path = os.getenv("LOG_PATH", "./logs/")
 
 logging.basicConfig(format="%(asctime)s %(levelname)-8s %(message)s", filename=log_path + "planning.log", level=logging.INFO)
 

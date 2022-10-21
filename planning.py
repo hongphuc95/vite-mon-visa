@@ -12,7 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
-log_path = os.getenv("LOG_PATH")
+log_path = os.getenv("LOG_PATH", "./logs/")
 auto_reservation = os.getenv("AUTO_RESERVATION", 'False').lower() == "true"
 
 logging.basicConfig(format="%(asctime)s %(levelname)-8s %(message)s", filename=log_path + "planning.log", level=logging.INFO)
