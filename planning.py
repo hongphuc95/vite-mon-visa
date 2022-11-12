@@ -171,9 +171,14 @@ class Appointment():
                 last_name = self.driver.find_element("name", "lastname")
                 email = self.driver.find_element("name", "email")
                 email_check = self.driver.find_element("name", "emailcheck")
-                nationality = self.driver.find_element("name", "eZBookingAdditionalField_value_21067")
-                entry_date = self.driver.find_element("name", "eZBookingAdditionalField_value_21071")
-                zip_code = self.driver.find_element("name", "eZBookingAdditionalField_value_21073")
+                
+                nationality_id = self.driver.find_element("xpath", "//label[contains(text(),'Nationalité')]").get_attribute("for")
+                entry_date_id = self.driver.find_element("xpath", """//label[contains(text(),"Date d'entrée")]""").get_attribute("for")
+                zip_code_id = self.driver.find_element("xpath", "//label[contains(text(),'Code postal')]").get_attribute("for")
+                booking_field_prefix = "eZBookingAdditionalField_value"
+                nationality = self.driver.find_element("name", f"{booking_field_prefix}_{nationality_id}")
+                entry_date = self.driver.find_element("name", f"{booking_field_prefix}_{entry_date_id}")
+                zip_code = self.driver.find_element("name", f"{booking_field_prefix}_{zip_code_id}")
 
                 first_name.send_keys(os.getenv("FIRST_NAME"))
                 last_name.send_keys(os.getenv("LAST_NAME"))
